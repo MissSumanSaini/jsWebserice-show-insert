@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="jquery-3.6.0.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            Show();
+        });
+
+        function Show() {
+
+            $.ajax({
+                url: 'WebService1.asmx/EmployeeGet',
+                type: 'post',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: "{}",
+                success: function (data) {
+                    data = JSON.parse(data.d);
+                    $("#tbl").find("tr:gt(0)").remove();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#tbl").append('<tr>  <td>' + data[i].EmpId + '</td>   <td>' + data[i].EmpName + ' </td> <td>' + data[i].EmpAddress + ' </td>  <td>' + data[i].Age + ' </td> </tr>');
+                    }
+                },
+                error: function () {
+                    alert('Data  not found');
+                }
+
+            });
+        }
+
+
+        function Insert() {
+            $.ajax({
+                url: 'WebService1.asmx/EmployeeInsert',
+                type: 'post',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                data: "{A:'" + $("#txtName").val() + "' , B:'" + $("#txtAddress").val() + "', C:'" + $("#txtAge").val() + "'}",
+                success: function () {
+                    alert('Record saved successfully');
+                    Show();
+                },
+                error: function () {
+                    alert('Record not saved successfully');
+                }
+
+            });
+        }
+    </script>
+        <meta charset="utf-8" />
+        <title></title>
+</head >
+            <body>
+                <table>
+                    <tr>
+                        <td> Name:</td>
+                        <td><input type="text" id="txtName" /></td>
+                    </tr>
+
+                    <tr>
+                        <td> Address:</td>
+                        <td><input type="text" id="txtAddress" /></td>
+                    </tr>
+
+                    <tr>
+                        <td> Age:</td>
+                        <td><input type="text" id="txtAge" /></td>
+                    </tr>
+
+                    <tr>
+                        <td> </td>
+                        <td><input type="button" id="btnInsert" value="SAVE" onclick="Insert()" /> </td>
+                    </tr>
+                </table>
+                <table id="tbl" border="1">
+                    <tr>
+                        <th>EmployeeId</th>
+                        <th>EmployeeName</th>
+                        <th>EmployeeAddress</th>
+                        <th>EmployeeAge</th>
+
+                    </tr>
+                </table>
+            </body>
+</html >
